@@ -53,5 +53,9 @@ class UserTest < ActiveSupport::TestCase
     assert_not @user.valid?
   end
 
+  test "authenticated? should return false for a user with nil digest" do #when one browser logs out of the first one then close and reopen the second one
+    # wer logs out and
+    assert_not @user.authenticated?('')
+  end
 
 end

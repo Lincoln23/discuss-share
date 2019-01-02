@@ -1,9 +1,7 @@
 class UsersController < ApplicationController
   def new
-    @user = User.new
+    @user = User.new #for the form_for in the view
   end
-
-
   def show
     @user = User.find(params[:id])
   end
@@ -20,7 +18,7 @@ class UsersController < ApplicationController
   end
 
   private
-    def user_params
+    def user_params #strong paramters
       params.require(:user).permit(:name, :email, :password, :password_confirmation)
     end
 end
