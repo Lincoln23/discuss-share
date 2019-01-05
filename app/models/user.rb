@@ -1,13 +1,13 @@
 class User < ApplicationRecord
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   attr_accessor :remember_token
   # before_save {self.email = email.downcase} # Don't need self keyword on the RHS
   before_save {email.downcase!}
   validates :name, presence: true, length: {maximum: 50}
-  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, presence: true, length: {maximum: 255}, format: VALID_EMAIL_REGEX, uniqueness: {case_sensitive: false}
 
   has_secure_password
-  validates :password, presence: true, length: {minimum: 6} #:password comes from has_secure_password, it is a virtual attribute
+  validates :password, presence: true, length: {minimum: 6}, allow_nil: true #:password comes from has_secure_password, it is a virtual attribute
 
   def User.digest(string)
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : #uses the minimum cost parameter in tests and a normal (high) cost parameter in production
@@ -18,6 +18,7 @@ class User < ApplicationRecord
   def User.new_token
     SecureRandom.urlsafe_base64
   end
+
   def remember
     self.remember_token = User.new_token
     # self.remember_digest = User.digest(remember_token) doesn't work b/c of line 10
