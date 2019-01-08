@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_many :microposts, dependent: :destroy
   attr_accessor :remember_token, :activation_token, :reset_token
   before_save :downcase_email
   before_create :create_activation_digest
@@ -10,7 +11,7 @@ class User < ApplicationRecord
   validates :email, presence: true, length: {maximum: 255}, format: VALID_EMAIL_REGEX, uniqueness: {case_sensitive: false}
 
   has_secure_password
-  validates :password, presence: true, length: {minimum: 6}, allow_nil: true #:password comes from has_secure_password, it is a virtual attribute
+  validates :password, presence: true, length: {minimum: 6} #:password comes from has_secure_password, it is a virtual attribute
 
   def User.digest(string)
     cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : #uses the minimum cost parameter in tests and a normal (high) cost parameter in production
@@ -24,7 +25,7 @@ class User < ApplicationRecord
 
   def remember
     self.remember_token = User.new_token
-    # self.remember_digest = User.digest(remember_token) doesn't work b/c of line 10
+    # self.remember_digest = User.digest(remember_token) doesn't work b/c of validation
     # self.save
     update_attribute(:remember_digest, User.digest(remember_token)) # update_attribute bypasses validation b/c no access to user's password
   end
@@ -35,7 +36,7 @@ class User < ApplicationRecord
 
   def authenticated?(attribute, token)
     digest = send("#{attribute}_digest") # b/c in model don't need the self keyword in self.send
-    return false if digest.nil?
+    return false if digest.nil? # line 39 will return an error if it is nil
     BCrypt::Password.new(digest).is_password?(token)
   end
 
@@ -58,7 +59,11 @@ class User < ApplicationRecord
     UserMailer.account_activation(self).deliver_now
   end
   def password_reset_expired?
-    reset_sent_at < 2.hours.ago
+    reset_sent_at < 2.hours.ago #read as earlier than, password sent earlier than 2 hours ago  12pm sent at < 17-2
+  end
+
+  def feed
+    Micropost.where("user_id = ?", id)
   end
 
   private
@@ -71,8 +76,4 @@ class User < ApplicationRecord
     self.activation_token = User.new_token
     self.activation_digest = User.digest(activation_token)
   end
-
-
-
-
 end

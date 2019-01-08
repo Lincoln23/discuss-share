@@ -1,0 +1,6 @@
+<% if @feed_items.any? %>
+  <ol class="microposts">
+    <%= render @feed_items %> <!-- @feed_items knows it is of class microposts, and it will look for microposts/_micropost.html.erb-->
+  </ol>
+  <%= will_paginate @feed_items %>
+<% end %>

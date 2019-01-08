@@ -52,13 +52,13 @@ module SessionsHelper
   def remember(user)
     user.remember
     cookies.permanent.signed[:user_id] = user.id # permanent -> lasts 20 years, singed -> encrypted and singed
-    cookies.permanent[:remember_token] = user.remember_token
+    cookies.permanent[:remember_token] = user.remember_token # the cookies saved on the browser will be encrypted
   end
 
   # Redirects to stored location (or to the default).
   def redirect_back_or(default)
     redirect_to(session[:forwarding_url] || default)
-    session.delete(:fowarding_url)
+    session.delete(:forwarding_url)
   end
 
   # Stores the URL trying to be accessed.

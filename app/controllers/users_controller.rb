@@ -19,6 +19,8 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    @microposts = @user.microposts.paginate(page: params[:page])
+    #pulls the users out of the database one chunk at a time (30 by default), based on the :page parameter
   end
 
   def create
@@ -55,15 +57,8 @@ class UsersController < ApplicationController
   def user_params #strong paramters
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end
-
-  def logged_in_user
-    unless logged_in? # or if !logged_in
-      store_location #stores the requested url
-      flash[:danger] = "Please log in"
-      redirect_to login_path
-    end
-  end
-
+  # to prevent attackers to change/delete users by sending PATCH / DELETE requests
+  #
   def correct_user
     @user = User.find(params[:id])
     redirect_to root_path unless current_user?(@user)
