@@ -1,0 +1,2 @@
+$("#follow_form").html("<%= escape_javascript(render('users/follow')) %>"); // *refresh the page
+$("#followers").html('<%= @user.followers.count %>'); // update the followers field
