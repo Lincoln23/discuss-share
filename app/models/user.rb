@@ -9,7 +9,6 @@ class User < ApplicationRecord
   before_create :create_activation_digest
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
-  # before_save {self.email = email.downcase} # Don't need self keyword on the RHS
 
   validates :name, presence: true, length: {maximum: 50}
   validates :email, presence: true, length: {maximum: 255}, format: VALID_EMAIL_REGEX, uniqueness: {case_sensitive: false}
@@ -49,7 +48,7 @@ class User < ApplicationRecord
 
   def authenticated?(attribute, token)
     digest = send("#{attribute}_digest") # b/c in model don't need the self keyword in self.send
-    return false if digest.nil? # line 39 will return an error if it is nil
+    return false if digest.nil? # line 52 will return an error if it is nil
     BCrypt::Password.new(digest).is_password?(token)
   end
 
@@ -73,7 +72,7 @@ class User < ApplicationRecord
   end
 
   def password_reset_expired?
-    reset_sent_at < 2.hours.ago #read as earlier than, password sent earlier than 2 hours ago  12pm sent at < 17-2
+    reset_sent_at < 2.hours.ago #read as earlier than, time sent < time now - time sent i.e 9 sent < 12 - 2 : true
   end
 
   def feed
@@ -92,6 +91,7 @@ class User < ApplicationRecord
   def downcase_email
     email.downcase!
   end
+  #{self.email = email.downcase}  Don't need self keyword on the RHS
 
   def create_activation_digest
     self.activation_token = User.new_token
