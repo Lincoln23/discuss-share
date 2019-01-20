@@ -29,12 +29,15 @@ class User < ApplicationRecord
   def follow(other_user)
     following << other_user #append to the end of an array
   end
+
   def unfollow(other_user)
     following.delete(other_user)
   end
+
   def following?(other_user)
     following.include?(other_user)
   end
+
   def remember
     self.remember_token = User.new_token
     # self.remember_digest = User.digest(remember_token) doesn't work b/c of validation
@@ -80,9 +83,9 @@ class User < ApplicationRecord
     # following_ids === User.first.following.map(&:id)
     #
     # More efficent way of doing this
-        following_ids = "SELECT followed_id FROM relationships
+    following_ids = "SELECT followed_id FROM relationships
                          WHERE  follower_id = :user_id"
-        Micropost.where("user_id IN (#{following_ids})
+    Micropost.where("user_id IN (#{following_ids})
                          OR user_id = :user_id", user_id: id)
   end
 
@@ -91,6 +94,7 @@ class User < ApplicationRecord
   def downcase_email
     email.downcase!
   end
+
   #{self.email = email.downcase}  Don't need self keyword on the RHS
 
   def create_activation_digest

@@ -1,3 +1,14 @@
+GIT
+  remote: git://github.com/elastic/elasticsearch-rails.git
+  revision: 266b59c5e296abfc7a1a393fd130deb57d88e9ed
+  branch: master
+  specs:
+    elasticsearch-model (7.0.0)
+      activesupport (> 3)
+      elasticsearch (> 1)
+      hashie
+    elasticsearch-rails (7.0.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -72,10 +83,20 @@ GEM
     concurrent-ruby (1.1.4)
     crass (1.0.4)
     duktape (2.0.1.0)
+    elasticsearch (6.1.0)
+      elasticsearch-api (= 6.1.0)
+      elasticsearch-transport (= 6.1.0)
+    elasticsearch-api (6.1.0)
+      multi_json
+    elasticsearch-transport (6.1.0)
+      faraday
+      multi_json
     erubi (1.8.0)
     execjs (2.7.0)
     faker (1.7.3)
       i18n (~> 0.5)
+    faraday (0.15.4)
+      multipart-post (>= 1.2, < 3)
     ffi (1.9.25-x64-mingw32)
     formatador (0.2.5)
     globalid (0.4.1)
@@ -93,6 +114,7 @@ GEM
     guard-minitest (2.4.6)
       guard-compat (~> 1.2)
       minitest (>= 3.0)
+    hashie (3.6.0)
     i18n (0.9.5)
       concurrent-ruby (~> 1.0)
     jbuilder (2.8.0)
@@ -130,6 +152,7 @@ GEM
       ruby-progressbar
     msgpack (1.2.4-x64-mingw32)
     multi_json (1.13.1)
+    multipart-post (2.0.0)
     mysql2 (0.5.2-x64-mingw32)
     nenv (0.3.0)
     nio4r (2.3.1)
@@ -235,6 +258,8 @@ DEPENDENCIES
   carrierwave (= 1.2.2)
   coffee-rails (~> 4.2)
   duktape
+  elasticsearch-model!
+  elasticsearch-rails!
   faker (= 1.7.3)
   guard (= 2.14.1)
   guard-minitest (= 2.4.6)

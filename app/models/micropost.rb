@@ -1,4 +1,12 @@
 class Micropost < ApplicationRecord
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
+
+  mapping do
+    indexes :content, type: :text, analyzer: :english
+    indexes :user_id, type: :integer
+  end
+
   belongs_to :user
   default_scope -> { order(created_at: :desc) }
   mount_uploader :picture, PictureUploader

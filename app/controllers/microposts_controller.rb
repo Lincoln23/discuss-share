@@ -28,9 +28,8 @@ class MicropostsController < ApplicationController
     redirect_to root_path if @micropost.nil?
   end
 
-  private
-
   def micropost_params
     params.require(:micropost).permit(:content, :picture)
   end
+
 end
