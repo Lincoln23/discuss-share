@@ -21,6 +21,12 @@ class MicropostsController < ApplicationController
     redirect_to request.referrer || root_path #request.referrer is like request.original_url, knows where to redriect after deleting since it is in home and show
   end
 
+  def search
+    query = params[:search_posts].presence && params[:search_posts][:query]
+    if query
+      @posts = Micropost.search_posts(query)
+    end
+  end
   private
 
   def correct_user
@@ -31,5 +37,4 @@ class MicropostsController < ApplicationController
   def micropost_params
     params.require(:micropost).permit(:content, :picture)
   end
-
 end

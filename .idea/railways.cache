@@ -17,6 +17,15 @@
                           PATCH  /users/:id(.:format)                                                                     users#update
                           PUT    /users/:id(.:format)                                                                     users#update
                           DELETE /users/:id(.:format)                                                                     users#destroy
+        search_microposts POST   /microposts/search(.:format)                                                             microposts#search
+               microposts GET    /microposts(.:format)                                                                    microposts#index
+                          POST   /microposts(.:format)                                                                    microposts#create
+            new_micropost GET    /microposts/new(.:format)                                                                microposts#new
+           edit_micropost GET    /microposts/:id/edit(.:format)                                                           microposts#edit
+                micropost GET    /microposts/:id(.:format)                                                                microposts#show
+                          PATCH  /microposts/:id(.:format)                                                                microposts#update
+                          PUT    /microposts/:id(.:format)                                                                microposts#update
+                          DELETE /microposts/:id(.:format)                                                                microposts#destroy
                           GET    /users(.:format)                                                                         users#index
                           POST   /users(.:format)                                                                         users#create
                           GET    /users/new(.:format)                                                                     users#new
@@ -31,8 +40,8 @@
       edit_password_reset GET    /password_resets/:id/edit(.:format)                                                      password_resets#edit
            password_reset PATCH  /password_resets/:id(.:format)                                                           password_resets#update
                           PUT    /password_resets/:id(.:format)                                                           password_resets#update
-               microposts POST   /microposts(.:format)                                                                    microposts#create
-                micropost DELETE /microposts/:id(.:format)                                                                microposts#destroy
+                          POST   /microposts(.:format)                                                                    microposts#create
+                          DELETE /microposts/:id(.:format)                                                                microposts#destroy
             relationships POST   /relationships(.:format)                                                                 relationships#create
              relationship DELETE /relationships/:id(.:format)                                                             relationships#destroy
        rails_service_blob GET    /rails/active_storage/blobs/:signed_id/*filename(.:format)                               active_storage/blobs#show
