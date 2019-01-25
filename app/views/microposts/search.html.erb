@@ -11,6 +11,7 @@
   <% else %>
     <h2>Search results</h2>
 
+
     <table style="width: 100%;">
       <thead>
       <tr>
@@ -22,8 +23,10 @@
       <tbody>
       <% @posts.each do |post| %>
         <tr>
-          <td><%= post.content %></td>
-          <td><%= post.user_id %></td>
+          <% post[:primary].content.each do |keyword| %>
+             <td><%= keyword.html_safe %></td>
+            <% end %>
+<!--          <td><%#= post.user_id %></td>-->
         </tr>
       <% end %>
       <tbody>

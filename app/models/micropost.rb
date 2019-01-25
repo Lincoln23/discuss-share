@@ -1,10 +1,14 @@
 class Micropost < ApplicationRecord
-  include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
+  include Searchable
 
-  mapping do
-    indexes :content, type: :text, analyzer: :english
-    indexes :user_id, type: :integer
+  settings index: { number_of_shards: 1 } do
+    mappings dynamic: 'false' do
+      indexes :content, type: 'text', analyzer: 'ngram_analyzer',
+              search_analyzer: 'whitespace_analyzer'
+      indexes :user_id, type: 'text', analyzer: 'ngram_analyzer',
+              search_analyzer: 'whitespace_analyzer'
+    end
   end
 
   belongs_to :user
@@ -14,15 +18,20 @@ class Micropost < ApplicationRecord
   validates :content, presence: true, length: {maximum: 140}
   validate :picture_size
 
-  def Micropost.search_posts(query)
-    self.search(
-        query: {
-            match: {
-                "content": query.to_s
-            }
-        }
-    )
-  end
+  # def Micropost.search_posts(query)
+  #   self.search(
+  #       query: {
+  #           match: {
+  #               "content": query.to_s
+  #           }
+  #       },
+  #       highlight:{
+  #           fields:{
+  #               "content": {}
+  #           }
+  #       }
+  #   )
+  # end
 
   private
 

@@ -1,14 +1,3 @@
-GIT
-  remote: git://github.com/elastic/elasticsearch-rails.git
-  revision: 266b59c5e296abfc7a1a393fd130deb57d88e9ed
-  branch: master
-  specs:
-    elasticsearch-model (7.0.0)
-      activesupport (> 3)
-      elasticsearch (> 1)
-      hashie
-    elasticsearch-rails (7.0.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -88,6 +77,14 @@ GEM
       elasticsearch-transport (= 6.1.0)
     elasticsearch-api (6.1.0)
       multi_json
+    elasticsearch-extensions (0.0.30)
+      ansi
+      elasticsearch
+    elasticsearch-model (6.0.0)
+      activesupport (> 3)
+      elasticsearch (> 1)
+      hashie
+    elasticsearch-rails (6.0.0)
     elasticsearch-transport (6.1.0)
       faraday
       multi_json
@@ -258,8 +255,9 @@ DEPENDENCIES
   carrierwave (= 1.2.2)
   coffee-rails (~> 4.2)
   duktape
-  elasticsearch-model!
-  elasticsearch-rails!
+  elasticsearch-extensions
+  elasticsearch-model
+  elasticsearch-rails
   faker (= 1.7.3)
   guard (= 2.14.1)
   guard-minitest (= 2.4.6)
