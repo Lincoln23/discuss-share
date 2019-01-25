@@ -1,4 +1,5 @@
 class MicropostsController < ApplicationController
+  require 'json'
   before_action :logged_in_user, only: [:create, :destroy]
   before_action :correct_user, only: :destroy
 
@@ -22,12 +23,15 @@ class MicropostsController < ApplicationController
   end
 
   def search
-    query = params[:search_posts].presence && params[:search_posts][:query]
-    if query
-      @posts = Micropost.search_posts(query)
+    unless params[:search_posts].nil?
+    @posts = Autocompleter.call(search_params[:query].to_s)
     end
   end
   private
+
+  def search_params
+    params.require(:search_posts).permit(:query)
+  end
 
   def correct_user
     @micropost = current_user.microposts.find_by(id: params[:id])

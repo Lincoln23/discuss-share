@@ -1,4 +1,16 @@
 class User < ApplicationRecord
+  include Elasticsearch::Model::Callbacks
+  include Searchable
+
+  settings index: { number_of_shards: 1 } do
+    mappings dynamic: 'false' do
+      indexes :name, type: 'text', analyzer: 'ngram_analyzer',
+              search_analyzer: 'whitespace_analyzer'
+      indexes :email, type: 'text', analyzer: 'ngram_analyzer',
+              search_analyzer: 'whitespace_analyzer'
+    end
+  end
+
   has_many :microposts, dependent: :destroy
   has_many :active_relationships, class_name: "Relationship", foreign_key: "follower_id", dependent: :destroy
   has_many :passive_relationships, class_name: "Relationship", foreign_key: "followed_id", dependent: :destroy

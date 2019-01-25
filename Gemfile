@@ -2,8 +2,8 @@ source 'https://rubygems.org'
 git_source(:github) {|repo| "https://github.com/#{repo}.git"}
 
 
-gem 'elasticsearch-model', git: 'git://github.com/elastic/elasticsearch-rails.git', branch: 'master'
-gem 'elasticsearch-rails', git: 'git://github.com/elastic/elasticsearch-rails.git', branch: 'master'
+gem 'elasticsearch-rails'
+gem 'elasticsearch-model'
 ruby '2.5.3'
 gem 'bootstrap-sass', '~> 3.4.0'
 # gem 'chewy'
@@ -62,6 +62,7 @@ group :test do
   gem 'minitest-reporters', '1.1.14'
   gem 'guard', '2.14.1'
   gem 'guard-minitest', '2.4.6'
+  gem 'elasticsearch-extensions'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
