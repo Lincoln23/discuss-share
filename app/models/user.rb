@@ -5,9 +5,9 @@ class User < ApplicationRecord
   settings index: {number_of_shards: 1} do
     mappings dynamic: 'false' do
       indexes :name, type: 'text', analyzer: 'ngram_analyzer',
-              search_analyzer: 'whitespace_analyzer'
+        search_analyzer: 'whitespace_analyzer'
       indexes :email, type: 'text', analyzer: 'ngram_analyzer',
-              search_analyzer: 'whitespace_analyzer'
+        search_analyzer: 'whitespace_analyzer'
     end
   end
 
@@ -23,7 +23,7 @@ class User < ApplicationRecord
   has_many :messages
 
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-  NAME_REGEX = /\w+/
+  NAME_REGEX = /\w+/ # matches one or more proceeding word characters
 
   validates :name, presence: true, uniqueness: { case_sensitive: false },
     format: {with: /\A#{NAME_REGEX}\z/i},
