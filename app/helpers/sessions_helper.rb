@@ -1,6 +1,8 @@
 module SessionsHelper
   def log_in(user)
-    session[:user_id] = user.id #saves it to the browser's cookie, session is a rails method included in application_controller.rb
+    session[:user_id] = user.id
+    # saves it to the browser's cookie,
+    # session is a rails method included in application_controller.rb
   end
 
   # def current_user
@@ -16,7 +18,9 @@ module SessionsHelper
   # end
   #  same as above but rewritten with cleaner code D.R.Y
   def current_user
-    if (user_id = session[:user_id]) # NOT A COMPARISION “If session of user id exists (while setting user id to session of user id)""
+    if (user_id = session[:user_id])
+      # NOT A COMPARISION
+      # “If session of user id exists (while setting user id to session of user id)""
       return @current_user ||= User.find_by(id: user_id)
     elsif (user_id = cookies.signed[:user_id])
       user = User.find_by(id: user_id)
@@ -25,7 +29,6 @@ module SessionsHelper
         return @current_user = user
       end
     end
-
   end
 
   def current_user?(user)
@@ -33,7 +36,7 @@ module SessionsHelper
   end
 
   def logged_in?
-    !current_user.nil? #test to see if current user is logged in
+    !current_user.nil? # test to see if current user is logged in
   end
 
   def forget(user)
@@ -51,8 +54,10 @@ module SessionsHelper
 
   def remember(user)
     user.remember
-    cookies.permanent.signed[:user_id] = user.id # permanent -> lasts 20 years, singed -> encrypted and singed
-    cookies.permanent[:remember_token] = user.remember_token # the cookies saved on the browser will be encrypted
+    cookies.permanent.signed[:user_id] = user.id
+    # permanent -> lasts 20 years, singed -> encrypted and singed
+    cookies.permanent[:remember_token] = user.remember_token
+    # the cookies saved on the browser will be encrypted
   end
 
   # Redirects to stored location (or to the default).
