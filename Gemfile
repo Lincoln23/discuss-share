@@ -15,6 +15,8 @@ gem 'carrierwave', '1.2.2'
 gem 'mini_magick', '4.7.0'
 # Use mysql as the database for Active Record
 gem 'mysql2', '>= 0.4.4', '< 0.6.0'
+# for markdown support
+gem 'kramdown', '1.12.0'
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
 # Use SCSS for stylesheets

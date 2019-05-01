@@ -5,22 +5,8 @@ module SessionsHelper
     # session is a rails method included in application_controller.rb
   end
 
-  # def current_user
-  #   if session[:user_id]
-  #     @current_user ||= User.find_by(id: session[:user_id])
-  #   elsif cookies.signed[:remember_token]
-  #     user = User.find_by(id: cookies.signed[:remember_token])
-  #     if user && user.authenticated?(cookies.signed[:remember_token])
-  #       log_in user
-  #       @current_user = user
-  #     end
-  #   end
-  # end
-  #  same as above but rewritten with cleaner code D.R.Y
   def current_user
     if (user_id = session[:user_id])
-      # NOT A COMPARISION
-      # “If session of user id exists (while setting user id to session of user id)""
       return @current_user ||= User.find_by(id: user_id)
     elsif (user_id = cookies.signed[:user_id])
       user = User.find_by(id: user_id)
@@ -36,7 +22,7 @@ module SessionsHelper
   end
 
   def logged_in?
-    !current_user.nil? # test to see if current user is logged in
+    !current_user.nil?
   end
 
   def forget(user)

@@ -8,15 +8,21 @@ class MessagesController < ApplicationController
   def create
     message = current_user.messages.build(message_params)
     if message.save
-      ActionCable.server.broadcast 'room_channel',
-        content: message.content,
-        name: message.user.name.to_s
+      ActionCable.server.broadcast 'room_channel', message: render_message(message)
+      message.mentions.each do |mention|
+        ActionCable.server.broadcast "room_channel_user_#{mention.id}",
+          mention: true
+      end
     else
       render 'index'
     end
   end
 
   private
+
+  def render_message(message)
+    render partial: 'message', locals: { message: message }
+  end
 
   def get_messages
     @messages = Message.for_display
