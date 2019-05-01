@@ -2,7 +2,7 @@ class User < ApplicationRecord
   include Elasticsearch::Model::Callbacks
   include Searchable
 
-  settings index: { number_of_shards: 1 } do
+  settings index: {number_of_shards: 1} do
     mappings dynamic: 'false' do
       indexes :name, type: 'text', analyzer: 'ngram_analyzer',
               search_analyzer: 'whitespace_analyzer'
@@ -11,27 +11,37 @@ class User < ApplicationRecord
     end
   end
 
-  has_many :microposts, dependent: :destroy
-  has_many :active_relationships, class_name: "Relationship", foreign_key: "follower_id", dependent: :destroy
-  has_many :passive_relationships, class_name: "Relationship", foreign_key: "followed_id", dependent: :destroy
-  has_many :following, through: :active_relationships, source: :followed
-  has_many :followers, through: :passive_relationships, source: :follower
   attr_accessor :remember_token, :activation_token, :reset_token
   before_save :downcase_email
   before_create :create_activation_digest
+
+  has_many :microposts, dependent: :destroy
+  has_many :active_relationships, class_name: 'Relationship', foreign_key: 'follower_id', dependent: :destroy
+  has_many :passive_relationships, class_name: 'Relationship', foreign_key: 'followed_id', dependent: :destroy
+  has_many :following, through: :active_relationships, source: :followed
+  has_many :followers, through: :passive_relationships, source: :follower
+  has_many :messages
+
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  NAME_REGEX = /\w+/
 
-
-  validates :name, presence: true, length: {maximum: 50}
-  validates :email, presence: true, length: {maximum: 255}, format: VALID_EMAIL_REGEX, uniqueness: {case_sensitive: false}
+  validates :name, presence: true, uniqueness: { case_sensitive: false },
+    format: {with: /\A#{NAME_REGEX}\z/i},
+    length: {maximum: 15}
+  validates :email, presence: true, length: { maximum: 255 },
+    format: VALID_EMAIL_REGEX,
+    uniqueness: {case_sensitive: false}
 
   has_secure_password
-  validates :password, presence: true, length: {minimum: 6} #:password comes from has_secure_password, it is a virtual attribute
+  validates :password, presence: true, length: {minimum: 6}
+  #:password comes from has_secure_password, it is a virtual attribute
 
   def User.digest(string)
-    cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : #uses the minimum cost parameter in tests and a normal (high) cost parameter in production
+    cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
+      #uses the minimum cost parameter in tests and a normal (high) cost parameter in production
                BCrypt::Engine.cost
-    BCrypt::Password.create(string, cost: cost) #string is to be hashed and cost is the parameter that determines the computational cost to calculate the hash
+    BCrypt::Password.create(string, cost: cost)
+    #string is to be hashed and cost is the parameter that determines the computational cost to calculate the hash
   end
 
   def User.new_token

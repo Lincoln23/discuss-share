@@ -7,7 +7,9 @@ class SessionsController < ApplicationController
     if user && user.authenticate(params[:session][:password])
       if user.activated?
         log_in user
-        params[:session][:remember_me] == '1'? remember(user): forget(user) #if one session unchecks the  box it will log out of all browsers, therefore the else: forget(user)
+        params[:session][:remember_me] == '1' ? remember(user) : forget(user)
+        # if one session uncheck the box it will log out of all browsers,
+        # therefore the else: forget(user)
         redirect_back_or(user)
       else
         flash[:warning] = "Account not activated, please check your email for the activation link"
