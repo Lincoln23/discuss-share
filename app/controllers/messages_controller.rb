@@ -8,7 +8,9 @@ class MessagesController < ApplicationController
   def create
     message = current_user.messages.build(message_params)
     if message.save
-      redirect_to messages_url
+      ActionCable.server.broadcast 'room_channel',
+        content: message.content,
+        name: message.user.name.to_s
     else
       render 'index'
     end
