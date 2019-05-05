@@ -24,7 +24,7 @@ module Searchable
         }
     }
     # after_commit, the callback after the record has been created, updated, or destroyed
-    after_commit :index_document, if: :persisted? # Persisted means the object has been saved in the database
+    after_commit :index_document, if: :persisted?
     after_commit on: [:destroy] do
       __elasticsearch__.delete_document
     end
