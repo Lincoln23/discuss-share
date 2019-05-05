@@ -25,9 +25,7 @@ class User < ApplicationRecord
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   NAME_REGEX = /\w+/ # matches one or more proceeding word characters
 
-  validates :name, presence: true, uniqueness: { case_sensitive: false },
-    format: {with: /\A#{NAME_REGEX}\z/i},
-    length: {maximum: 15}
+  validates :name, presence: true, uniqueness: {case_sensitive: false}
   validates :email, presence: true, length: { maximum: 255 },
     format: VALID_EMAIL_REGEX,
     uniqueness: {case_sensitive: false}

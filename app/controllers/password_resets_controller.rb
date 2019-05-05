@@ -48,8 +48,6 @@ class PasswordResetsController < ApplicationController
     end
   end
 
-  private
-
   def get_user
     @user = User.find_by(email: params[:email])
   end
@@ -57,8 +55,6 @@ class PasswordResetsController < ApplicationController
   def valid_user
     @user && @user.activated? && @user.authenticated?(:reset, params[:id])
   end
-
-
 end
 
 
