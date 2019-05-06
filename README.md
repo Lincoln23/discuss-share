@@ -11,6 +11,8 @@ You will need to create a Username and password along with your email address to
   - Your email address is used to activate your account and in case you forget your password 
   - I fetch your profile picture on Gravatar associated with your email address 
   - When logging in, if "remember me" is checked, even if you close your browser you won't have to re-login! 
+ - **Security**: I implemented the login in system using 
+bcrypt so your password is kept safe 
   
   
 ### Share posts 
