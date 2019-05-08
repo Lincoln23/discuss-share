@@ -27,8 +27,10 @@ class UsersController < ApplicationController
     if @user.save
       @user.send_activation_email
       log_in @user
-      flash[:notice] = "In production an email would be sent using smtp"
-      flash[:info] = edit_account_activation_url(@user.activation_token, email: @user.email) if Rails.env.development?
+      if Rails.env.development?
+        flash[:notice] = "In production an email would be sent using smtp"
+        flash[:info] = edit_account_activation_url(@user.activation_token, email: @user.email)
+      end
       flash[:info] = "Please check your email to activate your account"
       redirect_to root_path
     else
