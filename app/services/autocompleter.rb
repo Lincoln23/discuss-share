@@ -1,6 +1,7 @@
 class Autocompleter
   MODELS_TO_SEARCH = [Micropost].freeze
-  attr_accessor :query # refers to @query, providing the getter and setter
+  attr_accessor :query
+
   def initialize(query)
     @query = query
   end
@@ -13,7 +14,6 @@ class Autocompleter
     results.map do |result|
       {
         primary: result.highlight,
-        # secondary: build_result(result)
       }
     end
   end
@@ -25,7 +25,7 @@ class Autocompleter
   private
 
   def results
-     Elasticsearch::Model.search(search_query, MODELS_TO_SEARCH).results
+    Elasticsearch::Model.search(search_query, MODELS_TO_SEARCH).results
   end
 
   def search_query
@@ -48,6 +48,7 @@ class Autocompleter
       }
     }
   end
+
   def multi_match
     {
       "multi_match": {
@@ -57,6 +58,7 @@ class Autocompleter
       }
     }
   end
+
   def priorities
     [
       {

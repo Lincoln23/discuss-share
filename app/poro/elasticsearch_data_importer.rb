@@ -7,6 +7,15 @@ module ElasticsearchDataImporter
       end
     end
   end
+
+  def self.bulk_index(records, model)
+    model.__elasticsearch__.client.bulk(
+      index: model.__elasticsearch__.index_name,
+      type: model.__elasticsearch__.document_type,
+      body: prepare_records(records)
+    )
+  end
+
   def self.prepare_records(records)
     records.map do |record|
       {
@@ -16,12 +25,5 @@ module ElasticsearchDataImporter
           }
       }
     end
-  end
-  def self.bulk_index(records, model)
-    model.__elasticsearch__.client.bulk(
-      index: model.__elasticsearch__.index_name,
-      type: model.__elasticsearch__.document_type,
-      body: prepare_records(records)
-    )
   end
 end

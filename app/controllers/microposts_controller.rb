@@ -19,14 +19,15 @@ class MicropostsController < ApplicationController
   def destroy
     @micropost.destroy
     flash[:success] = "Micropost deleted"
-    redirect_to request.referrer || root_path #request.referrer is like request.original_url, knows where to redriect after deleting since it is in home and show
+    redirect_back fallback_location: root_path
   end
 
   def search
     unless params[:search_posts].nil?
-    @posts = Autocompleter.call(search_params[:query].to_s)
+      @posts = Autocompleter.call(search_params[:query].to_s)
     end
   end
+
   private
 
   def search_params

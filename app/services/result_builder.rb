@@ -1,5 +1,6 @@
 class ResultBuilder
   attr_accessor :record
+
   def initialize(record)
     @record = record
   end

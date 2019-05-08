@@ -14,24 +14,22 @@ class UsersController < ApplicationController
   end
 
   def new
-    @user = User.new #for the form_for in the view
+    @user = User.new
   end
 
   def show
     @user = User.find(params[:id])
     @microposts = @user.microposts.paginate(page: params[:page])
-    #pulls the users out of the database one chunk at a time (30 by default), based on the :page parameter
   end
 
   def create
     @user = User.new(user_params)
-    if @user.save #checks if is user.valid?
-       @user.send_activation_email
-       log_in @user
-       flash[:notice] = "In production an email would be sent using smtp"
-       flash[:info] = edit_account_activation_url(@user.activation_token,
-                                                  email: @user.email)
-      #  flash[:info] = "Please check your email to activate your account"
+    if @user.save
+      @user.send_activation_email
+      log_in @user
+      flash[:notice] = "In production an email would be sent using smtp"
+      flash[:info] = edit_account_activation_url(@user.activation_token, email: @user.email) if Rails.env.development?
+      flash[:info] = "Please check your email to activate your account"
       redirect_to root_path
     else
       render "new"
@@ -61,7 +59,7 @@ class UsersController < ApplicationController
 
   def followers
     @title = "Followers"
-    @user  = User.find(params[:id])
+    @user = User.find(params[:id])
     @users = @user.followers.paginate(page: params[:page])
     render 'show_follow'
   end
@@ -69,11 +67,10 @@ class UsersController < ApplicationController
 
   private
 
-  def user_params #strong paramters
+  def user_params
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end
-  # to prevent attackers to change/delete users by sending PATCH / DELETE requests
-  #
+
   def correct_user
     @user = User.find(params[:id])
     redirect_to root_path unless current_user?(@user)
@@ -82,5 +79,4 @@ class UsersController < ApplicationController
   def admin_only
     redirect_to root_path unless current_user.admin?
   end
-
 end

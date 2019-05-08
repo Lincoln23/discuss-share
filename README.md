@@ -11,8 +11,8 @@ You will need to create a Username and password along with your email address to
   - Your email address is used to activate your account and in case you forget your password 
   - I fetch your profile picture on Gravatar associated with your email address 
   - When logging in, if "remember me" is checked, even if you close your browser you won't have to re-login! 
- - **Security**: I implemented the login in system using 
-bcrypt so your password is kept safe 
+      - **Security**: I change the token 
+ - **Security**: I implemented the login in system using bcrypt so your password is kept safe 
   
   
 ### Share posts 
@@ -28,6 +28,7 @@ Worried your homepage will be cluttered with posts?
 ### Searching 
 Want to find a post but you can't remember the content? 
   - Using ElasticSearch, I have created search functionality that will predict what you are typing and return to you the best results!
+  - **Details**: I first apply a standard tokenizer on the input to separate the text into words, then I apply lowercase, asciifolding and Ngram filters to create lowercase N-grams of words to be indexed and searched
 
 ### Live chat 
 Discussion in real time! use the live chat feature to talk to other about topics you care about!

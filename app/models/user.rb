@@ -11,7 +11,12 @@ class User < ApplicationRecord
     end
   end
 
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  NAME_REGEX = /\w+/
+
   attr_accessor :remember_token, :activation_token, :reset_token
+  has_secure_password
+
   before_save :downcase_email
   before_create :create_activation_digest
 
@@ -22,24 +27,17 @@ class User < ApplicationRecord
   has_many :followers, through: :passive_relationships, source: :follower
   has_many :messages
 
-  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-  NAME_REGEX = /\w+/ # matches one or more proceeding word characters
-
   validates :name, presence: true, uniqueness: {case_sensitive: false}
-  validates :email, presence: true, length: { maximum: 255 },
-    format: VALID_EMAIL_REGEX,
-    uniqueness: {case_sensitive: false}
-
-  has_secure_password
+  validates :email,
+            presence: true, length: {maximum: 255},
+            format: VALID_EMAIL_REGEX,
+            uniqueness: {case_sensitive: false}
   validates :password, presence: true, length: {minimum: 6}
-  #:password comes from has_secure_password, it is a virtual attribute
+
 
   def User.digest(string)
-    cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
-      #uses the minimum cost parameter in tests and a normal (high) cost parameter in production
-               BCrypt::Engine.cost
+    cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
     BCrypt::Password.create(string, cost: cost)
-    #string is to be hashed and cost is the parameter that determines the computational cost to calculate the hash
   end
 
   def User.new_token
@@ -47,7 +45,7 @@ class User < ApplicationRecord
   end
 
   def follow(other_user)
-    following << other_user #append to the end of an array
+    following << other_user
   end
 
   def unfollow(other_user)
@@ -60,9 +58,7 @@ class User < ApplicationRecord
 
   def remember
     self.remember_token = User.new_token
-    # self.remember_digest = User.digest(remember_token) doesn't work b/c of validation
-    # self.save
-    update_attribute(:remember_digest, User.digest(remember_token)) # update_attribute bypasses validation b/c no access to user's password
+    update_attribute(:remember_digest, User.digest(remember_token))
   end
 
   def forget
@@ -70,8 +66,8 @@ class User < ApplicationRecord
   end
 
   def authenticated?(attribute, token)
-    digest = send("#{attribute}_digest") # b/c in model don't need the self keyword in self.send
-    return false if digest.nil? # line 52 will return an error if it is nil
+    digest = send("#{attribute}_digest")
+    return false if digest.nil?
     BCrypt::Password.new(digest).is_password?(token)
   end
 
@@ -95,14 +91,10 @@ class User < ApplicationRecord
   end
 
   def password_reset_expired?
-    reset_sent_at < 2.hours.ago #read as earlier than, time sent < time now - time sent i.e 9 sent < 12 - 2 : true
+    reset_sent_at < 2.hours.ago
   end
 
   def feed
-    # Micropost.where("user_id IN (?) OR user_id = ?", following_ids, id)
-    # following_ids === User.first.following.map(&:id)
-    #
-    # More efficent way of doing this
     following_ids = "SELECT followed_id FROM relationships
                          WHERE  follower_id = :user_id"
     Micropost.where("user_id IN (#{following_ids})
@@ -114,8 +106,6 @@ class User < ApplicationRecord
   def downcase_email
     email.downcase!
   end
-
-  #{self.email = email.downcase}  Don't need self keyword on the RHS
 
   def create_activation_digest
     self.activation_token = User.new_token
