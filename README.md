@@ -41,7 +41,7 @@ Want to find a post but can’t remember who wrote it? Want to find a post but y
 
 ### Live chat 
 Discussion in real time! Use the live chat feature to talk to other about topics you care about!
-  - You can ping other users in chat by typing @{their name}
+  - You can ping other users in chat by typing @[their name]
   
 ## Technical Details 
 
