@@ -16,7 +16,7 @@ gem 'mini_magick', '4.9.4'
 # Use mysql as the database for Active Record
 gem 'mysql2', '>= 0.4.4', '< 0.6.0'
 # for markdown support
-gem 'kramdown', '1.12.0'
+gem 'kramdown', '2.3.0'
 # Use Puma as the app server
 gem 'puma', '~> 3.12'
 # Use SCSS for stylesheets
